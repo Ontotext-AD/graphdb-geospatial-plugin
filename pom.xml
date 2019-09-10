@@ -212,8 +212,8 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:https://github.com/Ontotext-AD/graphdb-geospatial-plugin.git</connection>
-		<developerConnection>scm:git:https://github.com/Ontotext-AD/graphdb-geospatial-plugin.git</developerConnection>
+		<connection>scm:git:git@github.com:Ontotext-AD/graphdb-geospatial-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:Ontotext-AD/graphdb-geospatial-plugin.git</developerConnection>
 		<url>https://github.com/Ontotext-AD/graphdb-geospatial-plugin</url>
 		<tag>HEAD</tag>
 	</scm>
