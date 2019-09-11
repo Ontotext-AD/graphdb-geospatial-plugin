@@ -1,3 +1,5 @@
+//   Copyright (C) 2019 "Sirma AI" JSC, trading as Ontotext
+
 package com.infomatiq.jsi.rtree;
 
 import com.infomatiq.jsi.Rectangle;

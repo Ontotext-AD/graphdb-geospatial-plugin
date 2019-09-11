@@ -1,7 +1,8 @@
 //   Rectangle.java
 //   Java Spatial Index Library
 //   Copyright (C) 2002-2005 Infomatiq Limited
-//  
+//   Copyright (C) 2019 "Sirma AI" JSC, trading as Ontotext
+//
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
 //  License as published by the Free Software Foundation; either
