@@ -4,7 +4,6 @@ package com.infomatiq.jsi.rtree;
 
 import com.infomatiq.jsi.Rectangle;
 import com.ontotext.trree.plugin.geo.Utils;
-import gnu.trove.TLongObjectHashMap;
 import gnu.trove.TLongObjectProcedure;
 import gnu.trove.TLongProcedure;
 
@@ -13,12 +12,13 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 
+import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
+
 /**
  * An extension to RTree implementation from jsi that invokes the matching node with the rectangle instead of
  * only the id
- * 
+ *
  * @author Damyan
- * 
  */
 public class RTreeWithCoords extends RTree {
 	final static int fileMarker = 0xBAD0BAD0;
@@ -27,7 +27,7 @@ public class RTreeWithCoords extends RTree {
 	private int size = 0;
 	private long rootNodeId = 0;
 
-	private TLongObjectHashMap<Node> nodeMap = new TLongObjectHashMap<Node>();
+	private LongObjectHashMap<Node> nodeMap = new LongObjectHashMap<>();
 
 	/**
 	 * @see com.infomatiq.jsi.SpatialIndex#intersects(Rectangle, TLongProcedure)
@@ -40,7 +40,7 @@ public class RTreeWithCoords extends RTree {
 	/**
 	 * Recursively searches the tree for all intersecting entries. Immediately calls execute() on the passed
 	 * IntProcedure when a matching entry is found.
-	 * 
+	 * <p>
 	 * TODO rewrite this to be non-recursive? Make sure it doesn't slow it down.
 	 */
 	private boolean intersects(Rectangle r, TLongObjectProcedure<Rectangle> v, Node n) {
@@ -75,7 +75,7 @@ public class RTreeWithCoords extends RTree {
 	/**
 	 * Recursively searches the tree for all intersecting entries. Immediately calls execute() on the passed
 	 * IntProcedure when a matching entry is found.
-	 * 
+	 * <p>
 	 * TODO rewrite this to be non-recursive? Make sure it doesn't slow it down.
 	 */
 	private boolean intersects(Rectangle r, TLongProcedure v, Node n) {
@@ -108,7 +108,7 @@ public class RTreeWithCoords extends RTree {
 		out.writeInt(0);
 		out.writeInt(0);
 		out.writeInt(0);
-		
+
 		// persist tree properties
 		out.writeInt(size());
 		out.writeLong(getRootNodeId());

@@ -7,6 +7,8 @@ import com.ontotext.trree.sdk.Entities.Scope;
 import gnu.trove.TLongHashSet;
 import gnu.trove.TLongObjectProcedure;
 import gnu.trove.TLongProcedure;
+
+import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
@@ -15,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -48,7 +48,7 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 
 	// Strange class, isn't List<Integer> enough?
 	private static class GeoStatBase {
-		final List<Long> subjects = new ArrayList<Long>();
+		final LongArrayList subjects = new LongArrayList(16);
 
 		public int size() {
 			return subjects.size();
@@ -72,7 +72,7 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 		private float aroundLon = 0f;
 		private float distance = 0;
 
-		public GeoStatNearBy(float lat, float lon, float dist, boolean within) {
+		public GeoStatNearBy(float lat, float lon, float dist) {
 			aroundLat = lat;
 			aroundLon = lon;
 			distance = dist;
@@ -85,7 +85,7 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 			}
 			return true;
 		}
-	};
+	}
 
 	private static class GeoStatWithinPoly extends GeoStatBase implements TLongObjectProcedure<Rectangle> {
 		private Polygon polygon;
@@ -101,7 +101,7 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 			}
 			return true;
 		}
-	};
+	}
 
 	private static void boundingCoordinates(Rectangle[] res, float degLat, float degLon, float distancekm) {
 		float radLat = (float) Math.toRadians(degLat);
@@ -391,8 +391,6 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 	 *            - owlim:near
 	 * @param objects
 	 * @param context
-	 * @param set
-	 * @param scope
 	 * @return
 	 */
 	private StatementIterator handleWithin(long subject, long predicate, long[] objects, long context,
@@ -428,7 +426,7 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 				float distancekm = getVarAsDouble(entities, objects[2]);
 
 				boundingCoordinates(result, latV, longV, distancekm);
-				stat = new GeoStatNearBy(latV, longV, radians, isWithinFlag);
+				stat = new GeoStatNearBy(latV, longV, radians);
 				haveValidStat = true;
 			} else {
 				if (objects.length == 4) {

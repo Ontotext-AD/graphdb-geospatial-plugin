@@ -11,7 +11,7 @@
 	<properties>
 		<graphdb.version>9.0.0-TR16</graphdb.version>
 
-		<java.level>1.8</java.level>
+		<java.level>11</java.level>
 
 		<internal.repo>http://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
 		<snapshots.repo>http://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
@@ -138,6 +138,20 @@
 			<version>4.13-beta-3</version>
 			<scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections-api</artifactId>
+            <version>11.0.0.M2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections</artifactId>
+            <version>11.0.0.M2</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
 	<profiles>
