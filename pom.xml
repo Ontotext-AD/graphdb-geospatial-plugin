@@ -11,7 +11,7 @@
 	<properties>
 		<graphdb.version>9.0.0-TR16</graphdb.version>
 
-		<java.level>11</java.level>
+		<java.level>1.8</java.level>
 
 		<internal.repo>http://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
 		<snapshots.repo>http://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
