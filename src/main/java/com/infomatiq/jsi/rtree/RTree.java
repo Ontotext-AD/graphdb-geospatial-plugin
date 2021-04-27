@@ -22,13 +22,13 @@ package com.infomatiq.jsi.rtree;
 
 import gnu.trove.TIntStack;
 import gnu.trove.TLongArrayList;
-import gnu.trove.TLongObjectHashMap;
 import gnu.trove.TLongProcedure;
 import gnu.trove.TLongStack;
 
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 
 import com.infomatiq.jsi.Point;
 import com.infomatiq.jsi.Rectangle;
@@ -67,7 +67,7 @@ public class RTree implements SpatialIndex {
   // map of nodeId -> node object
   // TODO eliminate this map - it should not be needed. Nodes
   // can be found by traversing the tree.
-  private TLongObjectHashMap nodeMap = new TLongObjectHashMap();
+  private final LongObjectHashMap<Node> nodeMap = new LongObjectHashMap<>();
   
   // internal consistency checking - set to true if debugging tree corruption
   private final static boolean INTERNAL_CONSISTENCY_CHECKING = false;
@@ -393,7 +393,7 @@ public class RTree implements SpatialIndex {
                 savedValues.add(value);
                 savedPriority = distanceSq;
               } else {
-                savedValues.reset();
+                savedValues.clear();
               }
             }
             
@@ -403,7 +403,7 @@ public class RTree implements SpatialIndex {
               for (int svi = 0; svi < savedValues.size(); svi++) {
                 distanceQueue.insert(savedValues.get(svi), savedPriority);
               }
-              savedValues.reset();
+              savedValues.clear();
             }
             
             // narrow the search, if we have already found N items
@@ -647,7 +647,7 @@ public class RTree implements SpatialIndex {
    * Get a node object, given the ID of the node.
    */
   public Node getNode(long id) {
-    return (Node) nodeMap.get(id);
+    return nodeMap.get(id);
   }
 
   /**
@@ -1017,7 +1017,7 @@ public class RTree implements SpatialIndex {
       if (n.isLeaf()) { // for leaves, the distance is an actual nearest distance 
         if (tempDistanceSq < furthestDistanceSq) {
           furthestDistanceSq = tempDistanceSq;
-          nearestIds.reset();
+          nearestIds.clear();
         }
         if (tempDistanceSq <= furthestDistanceSq) {
           nearestIds.add(n.ids[i]);
