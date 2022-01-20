@@ -1,7 +1,7 @@
 package com.ontotext.trree.plugin.geo;
 
 import com.ontotext.test.functional.base.SingleRepositoryFunctionalTest;
-import org.eclipse.rdf4j.RDF4JException;
+import org.eclipse.rdf4j.common.exception.RDF4JException;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -100,7 +100,7 @@ public abstract class AbstractPluginGeoSpatial extends SingleRepositoryFunctiona
 				System.out.println("createIndex " + ((reindexed) ? "success" : "failure/no datata"));
 	
 				getRepository().shutDown();
-				getRepository().initialize();
+				getRepository().init();
 				connection = getRepository().getConnection();
 	
 			} catch (Exception e) {
