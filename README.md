@@ -1,6 +1,7 @@
 # GraphDB GeoSpatial Plugin
 
-This is the GraphDB GeoSpatial plugin.
+This is the GraphDB GeoSpatial plugin. More information about it is available in the GraphDB documentation here:
+http://graphdb.ontotext.com/documentation/enterprise/geo-spatial-extensions.html
 
 ## Building the plugin
 
