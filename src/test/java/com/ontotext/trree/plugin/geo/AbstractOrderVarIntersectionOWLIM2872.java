@@ -138,10 +138,13 @@ public abstract class AbstractOrderVarIntersectionOWLIM2872 extends SingleReposi
 			}
 			System.out.println(results + " result(s)");
 
-			String explainPlan = ((Literal) conn.prepareTupleQuery(QueryLanguage.SPARQL, queryWithOntoExplain).evaluate().next().getBinding("plan").getValue()).getLabel();
+			try (TupleQueryResult tqr = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryWithOntoExplain).evaluate()) {
+				String explainPlan = ((Literal) tqr.next().getBinding("plan").getValue()).getLabel();
 
-			assertTrue("No results! Most lilkely the GeoSpatialPlugin triple pattern is placed between <lat> and <long>:\n" + explainPlan, results > 0);
-
+				assertTrue(
+						"No results! Most lilkely the GeoSpatialPlugin triple pattern is placed between <lat> and <long>:\n"
+								+ explainPlan, results > 0);
+			}
 		}
 		finally {
 			conn.close();
