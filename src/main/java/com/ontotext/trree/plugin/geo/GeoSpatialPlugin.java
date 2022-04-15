@@ -251,50 +251,58 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 				int count = 0;
 				Rectangle r = new Rectangle();
 				StatementIterator iter = statements.get(0, getLatitudeId(), 0, 0);
-				while (iter.next()) {
-					long entry = iter.subject;
-					long latCoord = iter.object;
-					long longCoord = -1;
-					StatementIterator iterLong = statements.get(entry, getLongtitudeId(), 0, 0);
-					if (iterLong.next()) {
-						longCoord = iterLong.object;
-					}
-					if (iterLong.next()) {
-						Logger.warn("multiple latitudes found for node " + entry);
-					}
-					if (longCoord != -1) {
-						// have valid coordinates for an entry
+				try {
+					while (iter.next()) {
+						long entry = iter.subject;
+						long latCoord = iter.object;
+						long longCoord = -1;
+						StatementIterator iterLong = statements.get(entry, getLongtitudeId(), 0, 0);
 						try {
-							Literal latLiteral = (Literal) entities.get(latCoord);
-							Literal longLiteral = (Literal) entities.get(longCoord);
-							float latDouble = Float.parseFloat(latLiteral.getLabel());
-							float longDouble = Float.parseFloat(longLiteral.getLabel());
-							r.minX = r.maxX = latDouble;
-							r.minY = r.maxY = longDouble;
-
-							if (!indexed.add(entry)) {
-								Logger.warn("node " + entry + " already indexed");
-							} else {
-								index.add(r, entry);
-								// update fingerprint
-								long fp = getFingerprint();
-								fp ^= Double.doubleToLongBits(latDouble);
-								fp ^= Double.doubleToLongBits(longDouble);
-								fp ^= entry;
-								setFingerprint(fp);
-								count++;
-								if (count % 10000 == 0) {
-									Logger.debug(count + " entries indexed so far (" + latDouble + ","
-											+ longDouble + ", entry=" + entities.get(entry) + ")");
-								}
+							if (iterLong.next()) {
+								longCoord = iterLong.object;
 							}
-						} catch (NumberFormatException nfe) {
-							// bad double value, skipping this entry
-						} catch (ClassCastException cce) {
-							// objects not literals, skipping this entry
+							if (iterLong.next()) {
+								Logger.warn("multiple latitudes found for node " + entry);
+							}
+						} finally {
+							iterLong.close();
 						}
-					} // if
-				} // while
+						if (longCoord != -1) {
+							// have valid coordinates for an entry
+							try {
+								Literal latLiteral = (Literal) entities.get(latCoord);
+								Literal longLiteral = (Literal) entities.get(longCoord);
+								float latDouble = Float.parseFloat(latLiteral.getLabel());
+								float longDouble = Float.parseFloat(longLiteral.getLabel());
+								r.minX = r.maxX = latDouble;
+								r.minY = r.maxY = longDouble;
+
+								if (!indexed.add(entry)) {
+									Logger.warn("node " + entry + " already indexed");
+								} else {
+									index.add(r, entry);
+									// update fingerprint
+									long fp = getFingerprint();
+									fp ^= Double.doubleToLongBits(latDouble);
+									fp ^= Double.doubleToLongBits(longDouble);
+									fp ^= entry;
+									setFingerprint(fp);
+									count++;
+									if (count % 10000 == 0) {
+										Logger.debug(count + " entries indexed so far (" + latDouble + ","
+												+ longDouble + ", entry=" + entities.get(entry) + ")");
+									}
+								}
+							} catch (NumberFormatException nfe) {
+								// bad double value, skipping this entry
+							} catch (ClassCastException cce) {
+								// objects not literals, skipping this entry
+							}
+						} // if
+					} // while
+				} finally {
+					iter.close();
+				}
 				Logger.debug(count + " entries indexed in total");
 				Logger.debug("Persisting index...");
 				if (false == index.checkConsistency()) {
@@ -466,21 +474,29 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
 					if (subject != 0) {
 						long entry = subject;
 						StatementIterator iter = statements.get(entry, getLatitudeId(), 0, context);
-						if (iter.next()) {
-							float latLoc = getIdAsFloat(entities, iter.object);
-							if (Float.isNaN(latLoc)) {
-								return StatementIterator.EMPTY;
-							}
-							StatementIterator iterLong = statements.get(entry, getLongtitudeId(), 0, context);
-							if (iterLong.next()) {
-								float lonLoc = getIdAsFloat(entities, iterLong.object);
+						try {
+							if (iter.next()) {
+								float latLoc = getIdAsFloat(entities, iter.object);
 								if (Float.isNaN(latLoc)) {
 									return StatementIterator.EMPTY;
 								}
-								if (poly.contains(latLoc, lonLoc)) {
-									return StatementIterator.create(subject, -1, -1, -1);
+								StatementIterator iterLong = statements.get(entry, getLongtitudeId(), 0, context);
+								try {
+									if (iterLong.next()) {
+										float lonLoc = getIdAsFloat(entities, iterLong.object);
+										if (Float.isNaN(latLoc)) {
+											return StatementIterator.EMPTY;
+										}
+										if (poly.contains(latLoc, lonLoc)) {
+											return StatementIterator.create(subject, -1, -1, -1);
+										}
+									}
+								} finally {
+									iterLong.close();
 								}
 							}
+						} finally {
+							iter.close();
 						}
 						return StatementIterator.EMPTY;
 					}
