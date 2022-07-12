@@ -1,12 +1,13 @@
 package com.ontotext.trree.plugin.geo;
 
+import com.ontotext.graphdb.Config;
+import com.ontotext.test.TemporaryLocalFolder;
 import com.ontotext.test.functional.base.SingleRepositoryFunctionalTest;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Random;
 
@@ -35,6 +36,21 @@ public abstract class AbstractPluginGeoSpatialCreateRandomPlaces extends SingleR
 			+ "     ?place omgeo:nearby('52.574472150718606' '17.008895874023438' '100') ."
 			+ "     optional {?place cidoc:P1_is_identified_by ?appellation}. "
 			+ "} ";
+
+	@ClassRule
+	public static TemporaryLocalFolder tmpFolder = new TemporaryLocalFolder();
+
+	@BeforeClass
+	public static void setWorkDir() {
+		System.setProperty("graphdb.home.work", String.valueOf(tmpFolder.getRoot()));
+		Config.reset();
+	}
+
+	@AfterClass
+	public static void resetWorkDir() {
+		System.clearProperty("graphdb.home.work");
+		Config.reset();
+	}
 
 	@Test
 	public void createRandomPlaces() throws Exception {
@@ -82,7 +98,7 @@ public abstract class AbstractPluginGeoSpatialCreateRandomPlaces extends SingleR
 			con.begin();
 			long id = 0;
 			int RANDOM_PLACES = 10000;
-			
+
 			if (useRemoteRepositoryManager())
 				RANDOM_PLACES=RANDOM_PLACES/10;
 

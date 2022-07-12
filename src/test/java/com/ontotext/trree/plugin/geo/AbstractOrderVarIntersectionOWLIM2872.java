@@ -1,15 +1,34 @@
 package com.ontotext.trree.plugin.geo;
 
+import com.ontotext.graphdb.Config;
+import com.ontotext.test.TemporaryLocalFolder;
 import com.ontotext.test.functional.base.SingleRepositoryFunctionalTest;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractOrderVarIntersectionOWLIM2872 extends SingleRepositoryFunctionalTest {
+	@ClassRule
+	public static TemporaryLocalFolder tmpFolder = new TemporaryLocalFolder();
+
+	@BeforeClass
+	public static void setWorkDir() {
+		System.setProperty("graphdb.home.work", String.valueOf(tmpFolder.getRoot()));
+		Config.reset();
+	}
+
+	@AfterClass
+	public static void resetWorkDir() {
+		System.clearProperty("graphdb.home.work");
+		Config.reset();
+	}
 
 	@Test
 	public void londonGeoSpatial() throws Exception {

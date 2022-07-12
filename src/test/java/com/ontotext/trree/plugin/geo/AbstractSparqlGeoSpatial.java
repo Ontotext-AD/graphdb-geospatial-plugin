@@ -1,5 +1,7 @@
 package com.ontotext.trree.plugin.geo;
 
+import com.ontotext.graphdb.Config;
+import com.ontotext.test.TemporaryLocalFolder;
 import com.ontotext.test.functional.base.SingleRepositoryFunctionalTest;
 import com.ontotext.test.utils.Utils;
 import org.eclipse.rdf4j.model.IRI;
@@ -10,6 +12,9 @@ import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.query.*;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -32,6 +37,21 @@ public abstract class AbstractSparqlGeoSpatial extends SingleRepositoryFunctiona
 			LAT = factory.createIRI(GEO_NAMESPACE, "lat");
 			LONG = factory.createIRI(GEO_NAMESPACE, "long");
 		}
+	}
+
+	@ClassRule
+	public static TemporaryLocalFolder tmpFolder = new TemporaryLocalFolder();
+
+	@BeforeClass
+	public static void setWorkDir() {
+		System.setProperty("graphdb.home.work", String.valueOf(tmpFolder.getRoot()));
+		Config.reset();
+	}
+
+	@AfterClass
+	public static void resetWorkDir() {
+		System.clearProperty("graphdb.home.work");
+		Config.reset();
 	}
 
 	@Test
