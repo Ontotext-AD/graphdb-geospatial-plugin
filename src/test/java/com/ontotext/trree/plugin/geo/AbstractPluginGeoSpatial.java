@@ -1,5 +1,7 @@
 package com.ontotext.trree.plugin.geo;
 
+import com.ontotext.graphdb.Config;
+import com.ontotext.test.TemporaryLocalFolder;
 import com.ontotext.test.functional.base.SingleRepositoryFunctionalTest;
 import org.eclipse.rdf4j.common.exception.RDF4JException;
 import org.eclipse.rdf4j.model.IRI;
@@ -9,8 +11,7 @@ import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.query.*;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -38,9 +39,24 @@ public abstract class AbstractPluginGeoSpatial extends SingleRepositoryFunctiona
 	static IRI gn_Airport = SimpleValueFactory.getInstance().createIRI("http://www.geonames.org/ontology#S.AIRP");
 	static IRI gn_medical = SimpleValueFactory.getInstance().createIRI("http://www.geonames.org/ontology#S.CTRM");
 
+	@ClassRule
+	public static TemporaryLocalFolder tmpFolder = new TemporaryLocalFolder();
+
 	@Parameters(name = "useUpdate = {0}")
 	public static List<Object[]> getParameters() {
 		return Arrays.<Object[]> asList(new Object[] { true }, new Object[] { false });
+	}
+
+	@BeforeClass
+	public static void setWorkDir() {
+		System.setProperty("graphdb.home.work", String.valueOf(tmpFolder.getRoot()));
+		Config.reset();
+	}
+
+	@AfterClass
+	public static void resetWorkDir() {
+		System.clearProperty("graphdb.home.work");
+		Config.reset();
 	}
 
 	public AbstractPluginGeoSpatial(boolean useUpdate) {
@@ -66,7 +82,7 @@ public abstract class AbstractPluginGeoSpatial extends SingleRepositoryFunctiona
 			} else {
 				BooleanQuery q = connection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
 				boolean result = q.evaluate();
-				
+
 				assertTrue(result);
 			}
 
@@ -94,19 +110,19 @@ public abstract class AbstractPluginGeoSpatial extends SingleRepositoryFunctiona
 			}
 			connection.commit();
 			connection.close();
-	
+
 			try {
 				boolean reindexed = createIndex();
 				System.out.println("createIndex " + ((reindexed) ? "success" : "failure/no datata"));
-	
+
 				getRepository().shutDown();
 				getRepository().init();
 				connection = getRepository().getConnection();
-	
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} finally { 
+		} finally {
 			connection.close();
 		}
 	}
