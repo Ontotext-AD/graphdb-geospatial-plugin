@@ -183,7 +183,7 @@ public class GeoSpatialPlugin extends PluginBase implements PatternInterpreter, 
         sl.reload();
 
 
-        Logger.info("Plugin:" + getName() + " initialized");
+        Logger.debug("Plugin:" + getName() + " initialized");
 	}
 
 	private void loadPredicates(PluginConnection pluginConnection) {
