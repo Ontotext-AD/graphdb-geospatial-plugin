@@ -19,11 +19,11 @@
 
 package com.infomatiq.jsi.rtree;
 
-import gnu.trove.TFloatArrayList;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntProcedure;
-import gnu.trove.TLongArrayList;
-import gnu.trove.TLongProcedure;
+import gnu.trove.list.array.TFloatArrayList;
+import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.procedure.TIntProcedure;
+import gnu.trove.list.array.TLongArrayList;
+import gnu.trove.procedure.TLongProcedure;
 
 /**
  * <p>
@@ -129,6 +129,6 @@ public class SortedList {
   }
   
   public long[] toNativeArray() {
-    return ids.toNativeArray(); 
+    return ids.toArray(); 
   }
 }

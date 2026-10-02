@@ -19,7 +19,7 @@
 
 package com.infomatiq.jsi;
 
-import gnu.trove.TLongProcedure;
+import gnu.trove.procedure.TLongProcedure;
 
 import java.util.Properties;
 

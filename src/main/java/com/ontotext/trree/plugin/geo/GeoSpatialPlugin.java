@@ -4,9 +4,9 @@ import com.infomatiq.jsi.Rectangle;
 import com.infomatiq.jsi.rtree.RTreeWithCoords;
 import com.ontotext.trree.sdk.*;
 import com.ontotext.trree.sdk.Entities.Scope;
-import gnu.trove.TLongHashSet;
-import gnu.trove.TLongObjectProcedure;
-import gnu.trove.TLongProcedure;
+import gnu.trove.set.hash.TLongHashSet;
+import gnu.trove.procedure.TLongObjectProcedure;
+import gnu.trove.procedure.TLongProcedure;
 
 import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 import org.eclipse.rdf4j.model.Literal;

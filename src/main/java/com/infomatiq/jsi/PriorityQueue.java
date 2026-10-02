@@ -19,9 +19,9 @@
 
 package com.infomatiq.jsi;
 
-import gnu.trove.TIntArrayList;
-import gnu.trove.TFloatArrayList;
-import gnu.trove.TLongArrayList;
+import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.list.array.TFloatArrayList;
+import gnu.trove.list.array.TLongArrayList;
 
 /**
  * <p>
@@ -201,8 +201,8 @@ public class PriorityQueue {
     long tempValue = values.get(lastIndex);
     float tempPriority = priorities.get(lastIndex);
 
-    values.remove(lastIndex);
-    priorities.remove(lastIndex);
+    values.removeAt(lastIndex);
+    priorities.removeAt(lastIndex);
 
     if (lastIndex > 0) {
       demote(0, tempValue, tempPriority);

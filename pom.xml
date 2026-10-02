@@ -9,9 +9,9 @@
 	<description>GeoSpatial plugin for GraphDB</description>
 
 	<properties>
-		<graphdb.version>10.0.0</graphdb.version>
+		<graphdb.version>12.0.0-Trove4J-RC1</graphdb.version>
 
-		<java.level>1.8</java.level>
+		<java.level>25</java.level>
 		<dependency.check.version>6.2.2</dependency.check.version>
 
 		<internal.repo>https://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
@@ -30,10 +30,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.15.0</version>
 				<configuration>
-					<source>${java.level}</source>
-					<target>${java.level}</target>
+					<release>${java.level}</release>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -41,7 +40,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M3</version>
+				<version>3.5.3</version>
 				<configuration>
 					<argLine>${argLine} ${extraArgLine}</argLine>
 					<systemPropertyVariables>
@@ -53,7 +52,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
+				<version>3.1.1</version>
 				<configuration>
 					<tagNameFormat>@{project.version}</tagNameFormat>
 				</configuration>
@@ -129,7 +128,7 @@
 		<dependency>
 			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
-			<version>2.0.2</version>
+			<version>3.0.3</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -157,7 +156,13 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<version>5.12.2</version>
 			<scope>test</scope>
 		</dependency>
 

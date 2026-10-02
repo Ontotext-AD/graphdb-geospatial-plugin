@@ -20,10 +20,10 @@
 
 package com.infomatiq.jsi.rtree;
 
-import gnu.trove.TIntStack;
-import gnu.trove.TLongArrayList;
-import gnu.trove.TLongProcedure;
-import gnu.trove.TLongStack;
+import gnu.trove.stack.array.TIntArrayStack;
+import gnu.trove.list.array.TLongArrayList;
+import gnu.trove.procedure.TLongProcedure;
+import gnu.trove.stack.array.TLongArrayStack;
 
 import java.util.Properties;
 
@@ -81,8 +81,8 @@ public class RTree implements SpatialIndex {
   // stacks used to store nodeId and entry index of each node 
   // from the root down to the leaf. Enables fast lookup
   // of nodes when a split is propagated up the tree.
-  private TLongStack parents = new TLongStack();
-  private TIntStack parentsEntry = new TIntStack();
+  private TLongArrayStack parents = new TLongArrayStack();
+  private TIntArrayStack parentsEntry = new TIntArrayStack();
   
   // initialisation
   private int treeHeight = 1; // leaves are always level 1
@@ -95,7 +95,7 @@ public class RTree implements SpatialIndex {
   // Deleted node objects are retained in the nodeMap, 
   // so that they can be reused. Store the IDs of nodes
   // which can be reused.
-  private TLongStack deletedNodeIds = new TLongStack();
+  private TLongArrayStack deletedNodeIds = new TLongArrayStack();
   
   // List of nearest rectangles. Use a member variable to
   // avoid recreating the object each time nearest() is called.
@@ -241,10 +241,10 @@ public class RTree implements SpatialIndex {
     // to determine if it contains r. For each entry found, invoke
     // findLeaf on the node pointed to by the entry, until r is found or
     // all entries have been checked.
-  	parents.reset();
+  	parents.clear();
   	parents.push(rootNodeId);
   	
-  	parentsEntry.reset();
+  	parentsEntry.clear();
   	parentsEntry.push(-1);
   	Node n = null;
   	int foundIndex = -1;  // index of entry to be deleted in leaf
@@ -335,10 +335,10 @@ public class RTree implements SpatialIndex {
       return;
     }    
     
-    parents.reset();
+    parents.clear();
     parents.push(rootNodeId);
     
-    parentsEntry.reset();
+    parentsEntry.clear();
     parentsEntry.push(-1);
     
     // TODO: possible shortcut here - could test for intersection with the 
@@ -467,10 +467,10 @@ public class RTree implements SpatialIndex {
       return;
     }
     
-    parents.reset();
+    parents.clear();
     parents.push(rootNodeId);
     
-    parentsEntry.reset();
+    parentsEntry.clear();
     parentsEntry.push(-1);
     
     nearestNIds.init(count);
@@ -546,10 +546,10 @@ public class RTree implements SpatialIndex {
     // find all rectangles in the tree that are contained by the passed rectangle
     // written to be non-recursive (should model other searches on this?)
         
-    parents.reset();
+    parents.clear();
     parents.push(rootNodeId);
     
-    parentsEntry.reset();
+    parentsEntry.clear();
     parentsEntry.push(-1);
     
     // TODO: possible shortcut here - could test for intersection with the 
@@ -1073,7 +1073,7 @@ public class RTree implements SpatialIndex {
     Node parent = null;
     int parentEntry = 0;
     
-    TLongStack eliminatedNodeIds = new TLongStack();
+    TLongArrayStack eliminatedNodeIds = new TLongArrayStack();
   
     // CT2 [Find parent entry] If N is the root, go to CT6. Otherwise 
     // let P be the parent of N, and let En be N's entry in P  
@@ -1130,8 +1130,8 @@ public class RTree implements SpatialIndex {
   private Node chooseNode(float minX, float minY, float maxX, float maxY, int level) {
     // CL1 [Initialize] Set N to be the root node
     Node n = getNode(rootNodeId);
-    parents.reset();
-    parentsEntry.reset();
+    parents.clear();
+    parentsEntry.clear();
      
     // CL2 [Leaf check] If N is a leaf, return N
     while (true) {

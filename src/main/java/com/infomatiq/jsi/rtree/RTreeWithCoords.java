@@ -4,8 +4,8 @@ package com.infomatiq.jsi.rtree;
 
 import com.infomatiq.jsi.Rectangle;
 import com.ontotext.trree.plugin.geo.Utils;
-import gnu.trove.TLongObjectProcedure;
-import gnu.trove.TLongProcedure;
+import gnu.trove.procedure.TLongObjectProcedure;
+import gnu.trove.procedure.TLongProcedure;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
